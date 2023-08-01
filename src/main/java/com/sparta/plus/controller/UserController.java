@@ -23,7 +23,7 @@ public class UserController {
             return userService.Signup(signupRequestDto);
         }
         // 로그인
-        @PostMapping("signin")
+        @PostMapping("/auth/signin")
         public ResponseEntity<ApiResponseDto> signin(@RequestBody AuthRequestDto authRequestDto) {
                 return userService.signin(authRequestDto);
         }
