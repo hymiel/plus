@@ -59,14 +59,13 @@ public class UserService {
         String nickName = authRequestDto.getNickName();
         String password = authRequestDto.getPassword();
 
-        User user = userRepository.findByNickName(nickName).orElseThrow(()-> new IllegalArgumentException(" 등록된 사용자가 없습니다."));
+        User user = userRepository.findByNickName(nickName).orElse(null);
 
-        if (!passwordEncoder.matches(password, user.getPassword())) {
-            return ResponseEntity.status(400).body(new ApiResponseDto("비밀번호가 일치하지 않습니다.",HttpStatus.BAD_REQUEST.value()));
+        if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
+            return ResponseEntity.status(400).body(new ApiResponseDto("닉네임 또는 패스워드를 확인해주세요.", HttpStatus.BAD_REQUEST.value()));
+        } else {
+            return ResponseEntity.status(201).body(new ApiResponseDto("로그인 성공", HttpStatus.CREATED.value()));
         }
-        return ResponseEntity.status(201).body(new ApiResponseDto("로그인 성공",HttpStatus.CREATED.value()));
     }
-
-
 }
 
