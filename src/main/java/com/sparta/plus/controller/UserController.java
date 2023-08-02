@@ -7,6 +7,7 @@ import com.sparta.plus.jwt.JwtUtil;
 import com.sparta.plus.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,13 +25,14 @@ public class UserController {
         // 회원가입
         @PostMapping("auth/signup")
         public ResponseEntity<ApiResponseDto> signup (@RequestBody SignupRequestDto signupRequestDto) {
-            return userService.Signup(signupRequestDto);
+            userService.Signup(signupRequestDto);
+            return ResponseEntity.status(201).body(new ApiResponseDto("회원가입 완료 되었습니다.", HttpStatus.CREATED.value()));
         }
         // 로그인
         @PostMapping("/auth/signin")
         public ResponseEntity<ApiResponseDto> signin(@RequestBody AuthRequestDto authRequestDto, HttpServletResponse response) {
                 // JWT 생성 및 쿠키에 저장 후 Response 객체에 추가
                 response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(authRequestDto.getNickName(), authRequestDto.getRole()));
-                return userService.signin(authRequestDto);
+                return ResponseEntity.ok().body(new ApiResponseDto("로그인 성공", HttpStatus.OK.value()));
         }
 }

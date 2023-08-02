@@ -33,7 +33,7 @@ public class PostController {
     @PostMapping("/posts")
     public ResponseEntity<ApiResponseDto> createdPost(@RequestBody PostRequestDto postRequestDto, @RequestBody UserDetailsImpl userDetails) {
         postService.createdPost(postRequestDto, userDetails);
-        return ResponseEntity.status(200).body(new ApiResponseDto("게시글 작성이 되었습니다.", HttpStatus.OK.value()));
+        return ResponseEntity.status(200).body(new ApiResponseDto("게시글 작성 성공",HttpStatus.OK.value()));
     }
     // 게시글 조회 API
     // 제목, 작성자명(nickname), 작성 날짜, 작성 내용을 조회하기 (검색 기능이 아닙니다. 간단한 게시글 조회만 구현해주세요.)
@@ -44,14 +44,15 @@ public class PostController {
     // 게시글 수정 API
     // 토큰을 검사하여, 해당 사용자가 작성한 게시글만 수정 가능
     @PutMapping("/posts/{id}")
-    public ResponseEntity<ApiResponseDto> updatePost(@PathVariable Long id, @RequestBody PostRequestDto postRequestDto, @RequestBody UserDetailsImpl userDetails) {
+    public ResponseEntity<ApiResponseDto> updatePost(@PathVariable Long id, @RequestBody PostRequestDto postRequestDto, UserDetailsImpl userDetails) {
         postService.updatePost(id, postRequestDto, userDetails);
-        return ResponseEntity.status(200).body(new ApiResponseDto("게시글 수정에 성공했습니다", HttpStatus.OK.value()));
+        return ResponseEntity.status(200).body(new ApiResponseDto("게시글 수정 성공",HttpStatus.OK.value()));
     }
     // 게시글 삭제 API
     // 토큰을 검사하여, 해당 사용자가 작성한 게시글만 삭제 가능
     @DeleteMapping("/posts/{id}")
-    public String deletePost(@PathVariable Long id, @RequestBody PostRequestDto postRequestDto, @RequestBody UserDetailsImpl userDetails) {
-        return postService.deletePost(id, postRequestDto, userDetails);
+    public ResponseEntity<ApiResponseDto> deletePost(@PathVariable Long id, @RequestBody PostRequestDto postRequestDto, UserDetailsImpl userDetails) {
+        postService.updatePost(id, postRequestDto, userDetails);
+        return ResponseEntity.status(200).body(new ApiResponseDto("게시글 삭제 성공",HttpStatus.OK.value()));
     }
 }
